@@ -25,10 +25,10 @@ def owoify(text):
     substitutions = [
         ("nixos", "nixowos"),
         ("NixOS", "NixOwOs"),
-        ("rust", "ruwust"),
-        ("Rust", "rUwUst"),
         ("r|l", "w"),
         ("R|L", "W"),
+        ("wust", "ruwust"),
+        ("Wust", "rUwUst"),
         ("n(?=[aeiouAEIOU])(?![xX])", "ny"),
         ("N(?=[aeiouAEIOU])(?![xX])", "Ny"),
         ("ove", "uv"),
