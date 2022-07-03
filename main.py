@@ -29,8 +29,8 @@ def owoify(text):
         ("R|L", "W"),
         ("wust", "ruwust"),
         ("Wust", "rUwUst"),
-        ("n(?=[aeiouAEIOU])(?![xX])", "ny"),
-        ("N(?=[aeiouAEIOU])(?![xX])", "Ny"),
+        ("n(?=[aeiouAEIOU][^xX])", "ny"),
+        ("N(?=[aeiouAEIOU][^xX])", "Ny"),
         ("ove", "uv"),
     ]
 
