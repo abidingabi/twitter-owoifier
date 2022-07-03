@@ -56,10 +56,13 @@ class OwOifierClient(tweepy.StreamingClient):
 
         clients = [self.tweeting_clients[rule.id] for rule in response.matching_rules]
 
-        owofied_text = owoify(tweet.text)
+        owoified_text = owoify(tweet.text)
+
+        if len(owoified_text) > 280:
+            owoified_text = owoified_text[:280]
 
         for client in clients:
-            client.create_tweet(quote_tweet_id=tweet.id, text=owofied_text)
+            client.create_tweet(quote_tweet_id=tweet.id, text=owoified_text)
 
     def on_errors(self, errors):
         pass
