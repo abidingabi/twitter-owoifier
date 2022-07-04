@@ -75,9 +75,9 @@ class OwOifierClient(tweepy.StreamingClient):
 
 client = OwOifierClient(config["bearer_token"])
 
-rules_correct = len(client.get_rules().data) == len(config["owo_targets"])
+rules_correct = client.get_rules().data != None and len(client.get_rules().data) == len(config["owo_targets"])
 
-if not rules_correct:
+if not rules_correct and client.get_rules().data != None:
     client.delete_rules([rule.id for rule in client.get_rules().data])
 
 tweeting_clients = {}
