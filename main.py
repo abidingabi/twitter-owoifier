@@ -29,6 +29,8 @@ def owoify(text):
         ("R|L", "W"),
         ("wust", "ruwust"),
         ("Wust", "rUwUst"),
+        ("wobot", "rowobot"),
+        ("Wobot", "rOwObot"),
         ("n(?=[aeiouAEIOU][^xX])", "ny"),
         ("N(?=[aeiouAEIOU][^xX])", "Ny"),
         ("ove", "uv"),
