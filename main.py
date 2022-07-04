@@ -75,7 +75,9 @@ class OwOifierClient(tweepy.StreamingClient):
 
 client = OwOifierClient(config["bearer_token"])
 
-rules_correct = client.get_rules().data != None and len(client.get_rules().data) == len(config["owo_targets"])
+rules_correct = client.get_rules().data != None and len(client.get_rules().data) == len(
+    config["owo_targets"]
+)
 
 if not rules_correct and client.get_rules().data != None:
     client.delete_rules([rule.id for rule in client.get_rules().data])
@@ -90,12 +92,15 @@ for target in config["owo_targets"]:
         access_token_secret=target["access_token_secret"],
     )
 
-    if not rules_correct:
-        client.add_rules(
+if not rules_correct:
+    client.add_rules(
+        [
             tweepy.StreamRule(
                 f"({target['stream_rule']}) -is:retweet -is:reply -is:quote"
             )
-        )
+            for target in config["owo_targets"]
+        ]
+    )
 
 print("Rules: ")
 print(client.get_rules())
