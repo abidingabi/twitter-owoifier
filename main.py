@@ -77,12 +77,46 @@ class OwOifierClient(tweepy.StreamingClient):
 
 client = OwOifierClient(config["bearer_token"])
 
-rules_correct = client.get_rules().data != None and len(client.get_rules().data) == len(
-    config["owo_targets"]
-)
+initial_rules = client.get_rules().data
 
-if not rules_correct and client.get_rules().data != None:
-    client.delete_rules([rule.id for rule in client.get_rules().data])
+# rules_correct represents whether twitter has the same rules as the config
+rules_correct = client.get_rules().data != None
+for target in config["owo_targets"]:
+    rules_correct = (
+        rules_correct
+        and next(
+            filter(
+                lambda rule: rule.value.startswith(f"({target['stream_rule']})"),
+                initial_rules,
+            ),
+            None,
+        )
+        != None
+    )
+
+if not rules_correct:
+    print("Regenerating rules")
+    if initial_rules != None:
+        client.delete_rules([rule.id for rule in client.get_rules().data])
+
+    print(client.add_rules(
+        [
+            tweepy.StreamRule(
+                f"({target['stream_rule']}) -is:retweet -is:reply -is:quote"
+            )
+            for target in config["owo_targets"]
+        ]
+    ))
+
+rules = client.get_rules().data
+
+for target in config["owo_targets"]:
+    matched_rule = next(
+        filter(lambda rule: rule.value.startswith(f"({target['stream_rule']})"), rules),
+        None,
+    )
+    if matched_rule:
+        target["id"] = matched_rule.id
 
 tweeting_clients = {}
 
@@ -94,18 +128,6 @@ for target in config["owo_targets"]:
         access_token_secret=target["access_token_secret"],
     )
 
-if not rules_correct:
-    client.add_rules(
-        [
-            tweepy.StreamRule(
-                f"({target['stream_rule']}) -is:retweet -is:reply -is:quote"
-            )
-            for target in config["owo_targets"]
-        ]
-    )
-
-print("Rules: ")
-print(client.get_rules())
 
 client.save_tweeting_clients(tweeting_clients)
 client.filter(threaded=True)
