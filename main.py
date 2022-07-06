@@ -102,7 +102,7 @@ if not rules_correct:
     print(client.add_rules(
         [
             tweepy.StreamRule(
-                f"({target['stream_rule']}) -is:retweet -is:reply -is:quote"
+                f"({target['stream_rule']}) -is:retweet -is:reply -is:quote lang:en"
             )
             for target in config["owo_targets"]
         ]
