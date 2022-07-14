@@ -1,3 +1,4 @@
+import html
 import json
 import logging
 import random
@@ -60,7 +61,7 @@ class OwOifierClient(tweepy.StreamingClient):
 
         clients = [self.tweeting_clients[rule.id] for rule in response.matching_rules]
 
-        owoified_text = owoify(tweet.text)
+        owoified_text = owoify(html.unescape(tweet.text))
 
         if len(owoified_text) > 280:
             owoified_text = owoified_text[:280]
