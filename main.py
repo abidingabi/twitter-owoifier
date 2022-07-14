@@ -99,14 +99,16 @@ if not rules_correct:
     if initial_rules != None:
         client.delete_rules([rule.id for rule in client.get_rules().data])
 
-    print(client.add_rules(
-        [
-            tweepy.StreamRule(
-                f"({target['stream_rule']}) -is:retweet -is:reply -is:quote lang:en"
-            )
-            for target in config["owo_targets"]
-        ]
-    ))
+    print(
+        client.add_rules(
+            [
+                tweepy.StreamRule(
+                    f"({target['stream_rule']}) -is:retweet -is:reply -is:quote lang:en"
+                )
+                for target in config["owo_targets"]
+            ]
+        )
+    )
 
 rules = client.get_rules().data
 
